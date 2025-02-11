@@ -1,0 +1,269 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Pulse REST API",
+    "description": "API access to data collected from MCP servers and clients around the web",
+    "version": "v0beta",
+    "contact": {
+      "email": "hello@pulsemcp.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.pulsemcp.com/v0beta",
+      "description": "Beta API server"
+    }
+  ],
+  "paths": {
+    "/servers": {
+      "get": {
+        "summary": "List MCP Servers",
+        "description": "Retrieve a paginated list of MCP servers with optional search query & filtering",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search term to filter servers",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "integrations[]",
+            "in": "query",
+            "description": "Filter by integration slugs",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "count_per_page",
+            "in": "query",
+            "description": "Number of results per page (maximum: 5000)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 5000,
+              "maximum": 5000
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of results to skip for pagination",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "servers": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Server"
+                      }
+                    },
+                    "next": {
+                      "type": "string",
+                      "description": "URL for the next page of results"
+                    },
+                    "total_count": {
+                      "type": "integer",
+                      "description": "Total number of servers matching the query"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/integrations": {
+      "get": {
+        "summary": "List Integrations",
+        "description": "Retrieve a list of all available integrations that can be used for filtering servers",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "integrations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Integration"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Server": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "example-mcp"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://example-mcp.com"
+          },
+          "external_url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://example-mcp.com/landing"
+          },
+          "short_description": {
+            "type": "string",
+            "example": "A powerful MCP server for example use cases"
+          },
+          "source_code_url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://github.com/example/example-mcp"
+          },
+          "github_stars": {
+            "type": "integer",
+            "example": 1200
+          },
+          "package_registry": {
+            "type": "string",
+            "example": "npm"
+          },
+          "package_name": {
+            "type": "string",
+            "example": "example-mcp"
+          },
+          "package_download_count": {
+            "type": "integer",
+            "example": 50000
+          },
+          "EXPERIMENTAL_ai_generated_description": {
+            "type": "string",
+            "example": "An AI-generated description of the server capabilities"
+          },
+          "integrations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Integration"
+            }
+          }
+        }
+      },
+      "Integration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "AWS S3"
+          },
+          "slug": {
+            "type": "string",
+            "example": "aws-s3"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://docs.aws.amazon.com/AmazonS3/latest/API/Type_API_Reference.html"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "BAD_REQUEST"
+              },
+              "message": {
+                "type": "string",
+                "example": "Invalid integration slug provided"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "Too Many Requests - Rate limit exceeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  }
+}
