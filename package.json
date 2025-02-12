@@ -2,7 +2,7 @@
   "name": "pulsemcp-server",
   "version": "0.1.0",
   "description": "A Model Context Protocol server",
-  "private": true,
+  "private": false,
   "type": "module",
   "bin": {
     "pulsemcp-server": "./build/index.js"

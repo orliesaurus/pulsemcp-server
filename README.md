@@ -1,70 +1,190 @@
-# pulsemcp-server MCP Server
+# PulseMCP Server
 
-A Model Context Protocol server
-
-This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
-
-- Resources representing text notes with URIs and metadata
-- Tools for creating new notes
-- Prompts for generating summaries of notes
+A Model Context Protocol (MCP) server that provides tools for discovering and exploring MCP servers and integrations through the PulseMCP API.
 
 ## Features
 
-### Resources
-- List and access notes via `note://` URIs
-- Each note has a title, content and metadata
-- Plain text mime type for simple content access
-
-### Tools
-- `create_note` - Create new text notes
-  - Takes title and content as required parameters
-  - Stores note in server state
-
-### Prompts
-- `summarize_notes` - Generate a summary of all stored notes
-  - Includes all note contents as embedded resources
-  - Returns structured prompt for LLM summarization
-
-## Development
-
-Install dependencies:
-```bash
-npm install
-```
-
-Build the server:
-```bash
-npm run build
-```
-
-For development with auto-rebuild:
-```bash
-npm run watch
-```
+- List available MCP servers with filtering and pagination
+- Search for specific MCP servers by name or functionality
+- Filter servers by integration types
+- List all available integrations
+- Full TypeScript support
 
 ## Installation
 
-To use with Claude Desktop, add the server config:
+### Installing in MCP Clients
 
-On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+Add this to your MCP client configuration and adapt based on your Client's preferences. For example:
 
 ```json
 {
   "mcpServers": {
-    "pulsemcp-server": {
-      "command": "/path/to/pulsemcp-server/build/index.js"
+    "pulsemcp": {
+      "command": "npx",
+      "args": ["-y", "@orliesaurus/pulsemcp-server"]
     }
   }
 }
 ```
 
-### Debugging
+1. Clone the repository:
 
-Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
+```bash
+git clone <repository-url>
+cd pulsemcp-server
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Build the project:
+
+```bash
+npm run build
+```
+
+## Usage
+
+### Running the Server
+
+The server can be run directly after building:
+
+```bash
+./build/index.js
+```
+
+Or through npm:
+
+```bash
+npm start
+```
+
+### Development
+
+To watch for changes during development:
+
+```bash
+npm run watch
+```
+
+To inspect the server's MCP implementation:
 
 ```bash
 npm run inspector
 ```
 
-The Inspector will provide a URL to access debugging tools in your browser.
+## Available Tools
+
+### list_servers
+
+Lists MCP servers with optional filtering and pagination.
+
+Parameters:
+
+- `query` (optional): Search term to filter servers
+- `integrations` (optional): Array of integration slugs to filter by
+- `count_per_page` (optional): Number of results per page (maximum: 5000)
+- `offset` (optional): Number of results to skip for pagination
+
+Example:
+
+```json
+{
+  "query": "toolhouse",
+  "integrations": ["github"],
+  "count_per_page": 10,
+  "offset": 0
+}
+```
+
+### list_integrations
+
+Lists all available integrations. This tool takes no parameters.
+
+## Response Format
+
+Both tools return JSON responses with the following structure:
+
+### list_servers Response
+
+```json
+{
+  "servers": [
+    {
+      "name": "Server Name",
+      "url": "https://example.com",
+      "external_url": "https://external-link.com",
+      "short_description": "Server description",
+      "source_code_url": "https://github.com/example/repo",
+      "github_stars": 123,
+      "package_registry": "npm",
+      "package_name": "package-name",
+      "package_download_count": 1000,
+      "integrations": [
+        {
+          "name": "Integration Name",
+          "slug": "integration-slug",
+          "url": "https://integration-url.com"
+        }
+      ]
+    }
+  ],
+  "total_count": 1,
+  "next": null
+}
+```
+
+### list_integrations Response
+
+```json
+{
+  "integrations": [
+    {
+      "name": "Integration Name",
+      "slug": "integration-slug",
+      "url": "https://integration-url.com"
+    }
+  ]
+}
+```
+
+## Error Handling
+
+The server includes robust error handling for:
+
+- Invalid parameters
+- API connection issues
+- Rate limiting
+- Authentication errors
+
+Errors are returned in a standardized format with appropriate error codes and messages.
+
+## Development
+
+### Project Structure
+
+```
+pulsemcp-server/
+├── src/
+│   └── index.ts    # Main server implementation
+├── build/          # Compiled JavaScript
+├── package.json    # Project configuration
+└── tsconfig.json   # TypeScript configuration
+```
+
+### Dependencies
+
+- @modelcontextprotocol/sdk: ^0.6.0
+- axios: ^1.7.9
+- TypeScript: ^5.3.3
+
+## License
+
+Read LICENSE.MD
+
+## Contributing
+
+Open a PR - be nice and you will be rewarded!
