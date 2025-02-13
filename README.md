@@ -21,7 +21,7 @@ Add this to your MCP client configuration and adapt based on your Client's prefe
   "mcpServers": {
     "pulsemcp": {
       "command": "npx",
-      "args": ["-y", "@orliesaurus/pulsemcp-server"]
+      "args": ["-y", "pulsemcp-server"]
     }
   }
 }
