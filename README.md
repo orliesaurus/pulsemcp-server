@@ -1,11 +1,13 @@
 # PulseMCP Server
 
-A Model Context Protocol (MCP) server that provides tools for discovering and exploring MCP servers through the PulseMCP API.
+A Model Context Protocol (MCP) server that provides tools for discovering and exploring MCP servers and integrations through the PulseMCP API.
 
 ## Features
 
 - List available MCP servers with filtering and pagination
 - Search for specific MCP servers by name or functionality
+- Filter servers by integration types
+- List all available integrations
 - Full TypeScript support
 
 ## Installation
@@ -16,12 +18,12 @@ Add this to your MCP client configuration and adapt based on your Client's prefe
 
 ```json
 {
-	"mcpServers": {
-		"pulsemcp": {
-			"command": "npx",
-			"args": ["-y", "pulsemcp-server"]
-		}
-	}
+  "mcpServers": {
+    "pulsemcp": {
+      "command": "npx",
+      "args": ["-y", "pulsemcp-server"]
+    }
+  }
 }
 ```
 
@@ -83,6 +85,7 @@ Lists MCP servers with optional filtering and pagination.
 Parameters:
 
 - `query` (optional): Search term to filter servers
+- `integrations` (optional): Array of integration slugs to filter by
 - `count_per_page` (optional): Number of results per page (maximum: 5000)
 - `offset` (optional): Number of results to skip for pagination
 
@@ -90,11 +93,16 @@ Example:
 
 ```json
 {
-	"query": "toolhouse",
-	"count_per_page": 10,
-	"offset": 0
+  "query": "toolhouse",
+  "integrations": ["github"],
+  "count_per_page": 10,
+  "offset": 0
 }
 ```
+
+### list_integrations
+
+Lists all available integrations. This tool takes no parameters.
 
 ## Response Format
 
@@ -104,21 +112,42 @@ Both tools return JSON responses with the following structure:
 
 ```json
 {
-	"servers": [
-		{
-			"name": "Server Name",
-			"url": "https://example.com",
-			"external_url": "https://external-link.com",
-			"short_description": "Server description",
-			"source_code_url": "https://github.com/example/repo",
-			"github_stars": 123,
-			"package_registry": "npm",
-			"package_name": "package-name",
-			"package_download_count": 1000
-		}
-	],
-	"total_count": 1,
-	"next": null
+  "servers": [
+    {
+      "name": "Server Name",
+      "url": "https://example.com",
+      "external_url": "https://external-link.com",
+      "short_description": "Server description",
+      "source_code_url": "https://github.com/example/repo",
+      "github_stars": 123,
+      "package_registry": "npm",
+      "package_name": "package-name",
+      "package_download_count": 1000,
+      "integrations": [
+        {
+          "name": "Integration Name",
+          "slug": "integration-slug",
+          "url": "https://integration-url.com"
+        }
+      ]
+    }
+  ],
+  "total_count": 1,
+  "next": null
+}
+```
+
+### list_integrations Response
+
+```json
+{
+  "integrations": [
+    {
+      "name": "Integration Name",
+      "slug": "integration-slug",
+      "url": "https://integration-url.com"
+    }
+  ]
 }
 ```
 
