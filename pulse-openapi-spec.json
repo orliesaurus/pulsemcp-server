@@ -30,20 +30,6 @@
             }
           },
           {
-            "name": "integrations[]",
-            "in": "query",
-            "description": "Filter by integration slugs",
-            "required": false,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
             "name": "count_per_page",
             "in": "query",
             "description": "Number of results per page (maximum: 5000)",
@@ -86,41 +72,6 @@
                     "total_count": {
                       "type": "integer",
                       "description": "Total number of servers matching the query"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "429": {
-            "$ref": "#/components/responses/TooManyRequests"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalError"
-          }
-        }
-      }
-    },
-    "/integrations": {
-      "get": {
-        "summary": "List Integrations",
-        "description": "Retrieve a list of all available integrations that can be used for filtering servers",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "integrations": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Integration"
-                      }
                     }
                   }
                 }
@@ -187,30 +138,6 @@
           "EXPERIMENTAL_ai_generated_description": {
             "type": "string",
             "example": "An AI-generated description of the server capabilities"
-          },
-          "integrations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Integration"
-            }
-          }
-        }
-      },
-      "Integration": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "AWS S3"
-          },
-          "slug": {
-            "type": "string",
-            "example": "aws-s3"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri",
-            "example": "https://docs.aws.amazon.com/AmazonS3/latest/API/Type_API_Reference.html"
           }
         }
       },
@@ -226,7 +153,7 @@
               },
               "message": {
                 "type": "string",
-                "example": "Invalid integration slug provided"
+                "example": "Invalid parameter provided"
               }
             }
           }
