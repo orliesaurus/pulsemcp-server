@@ -2,6 +2,8 @@
 
 A Model Context Protocol (MCP) server that provides tools for discovering and exploring MCP servers and integrations through the PulseMCP API.
 
+<a href="https://glama.ai/mcp/servers/pprxunng2s"><img width="380" height="200" src="https://glama.ai/mcp/servers/pprxunng2s/badge" alt="PulseServer MCP server" /></a>
+
 ## Features
 
 - List available MCP servers with filtering and pagination
