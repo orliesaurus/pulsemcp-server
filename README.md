@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/orliesaurus-pulsemcp-server-badge.png)](https://mseep.ai/app/orliesaurus-pulsemcp-server)
+
 # PulseMCP Server
 
 A Model Context Protocol (MCP) server that provides tools for discovering and exploring MCP servers and integrations through the PulseMCP API.
