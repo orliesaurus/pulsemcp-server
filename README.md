@@ -187,4 +187,8 @@ Read LICENSE.MD
 
 ## Contributing
 
+### Resource
+[Open MCP Marketplace Web Plugin](https://github.com/AI-Agent-Hub/mcp-marketplace) MCP Marketplace is a small client web plugin, Support various MCP Server API Endpoint (e.g pulsemcp.com). Allowing User to Browse, Paginate and Select Various MCP Servers By Category .[Pypi](https://pypi.org/project/mcp-marketplace) | [Maintainer](https://github.com/AI-Agent-Hub) | [Website](http://www.deepnlp.org/store/ai-agent/mcp-server)
+
+
 Open a PR - be nice and you will be rewarded!
